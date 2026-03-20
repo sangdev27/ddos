@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Realtime Monitor</title>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <style>
+    body {
+      font-family: Arial;
+      background: #111;
+      color: #0f0;
+      text-align: center;
+      padding: 50px;
+    }
+    .box {
+      margin: 20px;
+      padding: 20px;
+      border: 1px solid #0f0;
+      border-radius: 10px;
+    }
+    h1 {
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Realtime Server Monitor</h1>
+
+<div class="box">
+  <h2>Total Requests</h2>
+  <p id="total">0</p>
+</div>
+
+<div class="box">
+  <h2>Requests / Second</h2>
+  <p id="rps">0</p>
+</div>
+
+<div class="box">
+  <h2>CPU Usage (%)</h2>
+  <p id="cpu">0</p>
+</div>
+
+<div class="box">
+  <h2>RAM Usage</h2>
+  <p id="ram">0</p>
+</div>
+
+<script>
+  const socket = io();
+
+  socket.on("stats", (data) => {
+    document.getElementById("total").innerText = data.totalRequests;
+    document.getElementById("rps").innerText = data.rps;
+    document.getElementById("cpu").innerText = data.cpu + " %";
+    document.getElementById("ram").innerText =
+      data.ram.usedMB + " MB / " + data.ram.totalMB + " MB";
+  });
+</script>
+
+</body>
+</html>
